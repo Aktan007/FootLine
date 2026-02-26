@@ -1,16 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
-from django.http import JsonResponse
 from django.db.models import Q
-from .models import (
-    Product, UserProfile, Order, OrderItem, DeliveryPoint,
-    Category, Manufacturer, Supplier
-)
+from .models import Product, UserProfile, Order, OrderItem, Supplier
 from .forms import ProductForm, OrderForm
-import json
 
 
 def login_view(request):
@@ -23,8 +17,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return redirect('shop:dashboard')
-        else:
-            messages.error(request, 'Неверный логин или пароль')
+        messages.error(request, 'Неверный логин или пароль')
     
     return render(request, 'shop/login.html')
 
@@ -61,12 +54,11 @@ def products_list(request):
     except UserProfile.DoesNotExist:
         return redirect('shop:login')
     
+    has_filters = False
     if profile.role == 'guest':
         products = Product.objects.all().order_by('article')
-        has_filters = False
     elif profile.role == 'client':
         products = Product.objects.all().order_by('article')
-        has_filters = False
     elif profile.role in ['manager', 'admin']:
         products = Product.objects.all()
         has_filters = True

@@ -45,7 +45,10 @@ class Product(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    discount = models.DecimalField(
+        max_digits=5, decimal_places=2, default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
     quantity = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     description = models.TextField(blank=True)
     photo = models.ImageField(upload_to='products/', blank=True, null=True)

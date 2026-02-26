@@ -1,0 +1,17 @@
+[MASTER]
+ignore=migrations
+
+[MESSAGES CONTROL]
+disable=
+    no-member,
+    too-few-public-methods,
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    invalid-name,
+    trailing-whitespace,
+    invalid-str-returned,
+    too-many-locals
+
+[FORMAT]
+max-line-length=120

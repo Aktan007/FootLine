@@ -1,13 +1,12 @@
+import csv
+from datetime import datetime
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from shop.models import (
-    Category, Manufacturer, Supplier, Product, 
+    Category, Manufacturer, Supplier, Product,
     DeliveryPoint, UserProfile, Order, OrderItem
 )
-from datetime import datetime
-import csv
-import os
-from django.conf import settings
 
 
 class Command(BaseCommand):

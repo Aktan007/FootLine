@@ -1,6 +1,6 @@
-from django import forms
-from .models import Product, Order, OrderItem, Category, Manufacturer, Supplier, DeliveryPoint
 from PIL import Image
+from django import forms
+from .models import Product, Order, OrderItem
 
 
 class ProductForm(forms.ModelForm):
@@ -18,7 +18,9 @@ class ProductForm(forms.ModelForm):
             'supplier': forms.Select(attrs={'class': 'form-control'}),
             'manufacturer': forms.Select(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
-            'discount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Скидка %', 'step': '0.01'}),
+            'discount': forms.NumberInput(attrs={
+                'class': 'form-control', 'placeholder': 'Скидка %', 'step': '0.01'
+            }),
             'quantity': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Кол-во на складе', 'step': '1'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Описание', 'rows': 4}),
             'photo': forms.FileInput(attrs={'class': 'form-control'}),
