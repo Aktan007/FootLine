@@ -14,7 +14,6 @@ import json
 
 
 def login_view(request):
-    """Представление для входа пользователя"""
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -31,7 +30,6 @@ def login_view(request):
 
 
 def products_list_guest(request):
-    """Представление для просмотра товаров гостем (без фильтрации)"""
     products = Product.objects.all().order_by('article')
     
     context = {
@@ -44,7 +42,6 @@ def products_list_guest(request):
 
 @login_required(login_url='shop:login')
 def dashboard(request):
-    """Главный экран после входа"""
     try:
         profile = request.user.profile
     except UserProfile.DoesNotExist:
@@ -59,27 +56,21 @@ def dashboard(request):
 
 @login_required(login_url='shop:login')
 def products_list(request):
-    """Представление для просмотра товаров (с фильтрацией и поиском для менеджера и админа)"""
     try:
         profile = request.user.profile
     except UserProfile.DoesNotExist:
         return redirect('shop:login')
     
-    # Проверяем роль пользователя
     if profile.role == 'guest':
-        # Гости видят все товары без фильтрации
         products = Product.objects.all().order_by('article')
         has_filters = False
     elif profile.role == 'client':
-        # Клиенты видят все товары без фильтрации
         products = Product.objects.all().order_by('article')
         has_filters = False
     elif profile.role in ['manager', 'admin']:
-        # Менеджер и администратор имеют доступ к фильтрации
         products = Product.objects.all()
         has_filters = True
         
-        # Поиск по всем текстовым полям
         search_query = request.GET.get('search', '').strip()
         if search_query:
             products = products.filter(
@@ -91,12 +82,10 @@ def products_list(request):
                 Q(category__name__icontains=search_query)
             )
         
-        # Фильтр по поставщику
         supplier_id = request.GET.get('supplier', '').strip()
         if supplier_id:
             products = products.filter(supplier_id=supplier_id)
         
-        # Сортировка по количеству на складе
         sort_qty = request.GET.get('sort_quantity', '')
         if sort_qty == 'asc':
             products = products.order_by('quantity')
@@ -107,7 +96,6 @@ def products_list(request):
         
         products = products.select_related('category', 'manufacturer', 'supplier')
     
-    # Получаем список поставщиков для фильтра
     suppliers = Supplier.objects.all().order_by('name')
     
     context = {
@@ -126,7 +114,6 @@ def products_list(request):
 
 @login_required(login_url='shop:login')
 def add_product(request):
-    """Добавление нового товара (только для администратора)"""
     try:
         profile = request.user.profile
     except UserProfile.DoesNotExist:
@@ -156,7 +143,6 @@ def add_product(request):
 
 @login_required(login_url='shop:login')
 def edit_product(request, article):
-    """Редактирование товара (только для администратора)"""
     try:
         profile = request.user.profile
     except UserProfile.DoesNotExist:
@@ -189,7 +175,6 @@ def edit_product(request, article):
 
 @login_required(login_url='shop:login')
 def delete_product(request, article):
-    """Удаление товара (только для администратора)"""
     try:
         profile = request.user.profile
     except UserProfile.DoesNotExist:
@@ -201,7 +186,6 @@ def delete_product(request, article):
     
     product = get_object_or_404(Product, article=article)
     
-    # Проверяем, есть ли товар в заказах
     if OrderItem.objects.filter(product=product).exists():
         messages.error(request, f'Товар "{product.name}" присутствует в заказах и не может быть удален')
         return redirect('shop:products_list')
@@ -222,7 +206,6 @@ def delete_product(request, article):
 
 @login_required(login_url='shop:login')
 def orders_list(request):
-    """Представление для просмотра заказов"""
     try:
         profile = request.user.profile
     except UserProfile.DoesNotExist:
@@ -244,7 +227,6 @@ def orders_list(request):
 
 @login_required(login_url='shop:login')
 def add_order(request):
-    """Добавление нового заказа (только для администратора)"""
     try:
         profile = request.user.profile
     except UserProfile.DoesNotExist:
@@ -274,7 +256,6 @@ def add_order(request):
 
 @login_required(login_url='shop:login')
 def edit_order(request, order_id):
-    """Редактирование заказа (только для администратора)"""
     try:
         profile = request.user.profile
     except UserProfile.DoesNotExist:
@@ -307,7 +288,6 @@ def edit_order(request, order_id):
 
 @login_required(login_url='shop:login')
 def delete_order(request, order_id):
-    """Удаление заказа (только для администратора)"""
     try:
         profile = request.user.profile
     except UserProfile.DoesNotExist:
@@ -334,6 +314,5 @@ def delete_order(request, order_id):
 
 
 def logout_view(request):
-    """Выход пользователя"""
     logout(request)
     return redirect('shop:login')
