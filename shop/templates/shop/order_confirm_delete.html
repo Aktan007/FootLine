@@ -1,0 +1,24 @@
+{% extends 'shop/base.html' %}
+{% block title %}Удаление заказа - FootLine{% endblock %}
+{% block content %}
+<h1 class="fw-bold mb-4"><i class="bi bi-trash me-2"></i>Удаление заказа</h1>
+<div class="col-lg-6">
+    <div class="alert alert-warning border-2">
+        <h5 class="alert-heading">&#9888; Подтверждение удаления</h5>
+        <p>Вы уверены, что хотите удалить заказ <strong>#{{ order.order_number }}</strong> от {{ order.order_date|date:"d.m.Y" }}?</p>
+        <p>Клиент: <strong>{{ order.customer_name }}</strong></p>
+        <p class="mb-0 small">Это действие невозможно отменить.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <form method="post" class="flex-fill">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger w-100 py-2">
+                <i class="bi bi-trash me-1"></i>Да, удалить
+            </button>
+        </form>
+        <a href="{% url 'shop:orders_list' %}" class="btn btn-secondary flex-fill text-center py-2">
+            <i class="bi bi-x-lg me-1"></i>Отмена
+        </a>
+    </div>
+</div>
+{% endblock %}
