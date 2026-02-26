@@ -21,7 +21,9 @@ class ProductForm(forms.ModelForm):
             'discount': forms.NumberInput(attrs={
                 'class': 'form-control', 'placeholder': 'Скидка %', 'step': '0.01'
             }),
-            'quantity': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Кол-во на складе', 'step': '1'}),
+            'quantity': forms.NumberInput(attrs={
+                'class': 'form-control', 'placeholder': 'Кол-во на складе', 'step': '1'
+            }),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Описание', 'rows': 4}),
             'photo': forms.FileInput(attrs={'class': 'form-control'}),
         }
