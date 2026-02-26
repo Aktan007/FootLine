@@ -5,6 +5,8 @@ ignore=migrations
 disable=
     no-member,
     import-error,
+    unsupported-binary-operation,
+    import-outside-toplevel,
     too-few-public-methods,
     missing-module-docstring,
     missing-class-docstring,
